@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secret Admin Area</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color:#edffff;">
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-5">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center">Secret Admin Area</h1>
+    </div>
+
+    <div class="container mb-5">
+        <div class="card border border-info mb-3">
+            <div class="card-header">General</div>
+            <div class="card-body">
+                <div>
+                    <form class="form mt-2" method="POST">
+                        {{ app_settings_form.hidden_tag() }}
+                        <div class="input-group mb-2">
+                            {{ app_settings_form.chat_enabled.label(class="form-control-label mr-3") }}
+                            {{ app_settings_form.chat_enabled(class_="form-control") }}
+                        </div>
+                        <div class="input-group mb-2">
+                            {{ app_settings_form.homepage_title.label(class="form-control-label mr-3") }}
+                            {{ app_settings_form.homepage_title(class_="form-control") }}
+                        </div>
+                        <div class="input-group mb-2">
+                            {{ app_settings_form.hex_value.label(class="form-control-label mr-3") }}
+                            {{ app_settings_form.hex_value(class_="form-control") }}
+                        </div>
+                        <div class="input-group mb-2">
+                            {{ app_settings_form.submit_1(class_="form-control btn-outline-success") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="card border border-info mb-3">
+            <div class="card-header">Media File -- This is where you upload your media file that is played on the front page.</div>
+            <div class="card-body">
+                <form class="form mt-2" method="POST" action="" enctype="multipart/form-data">
+                    {{ media_upload_file_form.hidden_tag() }}
+                    <div class="input-group mb-2">
+                        {{ media_upload_file_form.media_file.label(class="form-control-label mr-3") }}
+                        {{ media_upload_file_form.media_file(class_="form-control-file") }}
+                        {% if media_upload_file_form.media_file.errors %}
+                            {% for error in media_upload_file_form.media_file.errors %}
+                                <span>{{ error }}</span></br>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="input-group mb-2">
+                        {{ media_upload_file_form.submit_2(class_="form-control btn-outline-success float-left mr-5") }}
+                        {% if is_default == True %}
+                            <a href="#" class="btn btn-outline-warning disabled" role="button" aria-disabled="true">Can't remove media file, using default.</a>
+                        {% else %}
+                            <a class="btn btn-outline-warning float-right" href="{{ url_for('main.remove_media_file') }}"
+                           role="button">Remove current media file</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <div class="container mb-5">
+        <div class="card border border-danger mb-3">
+            <div class="card-header">Danger Zone</div>
+            <div class="card-body">
+                <form class="form-inline">
+                    <button type="button" data-toggle="modal" data-target="#resetViewModal" class="btn btn-warning mr-3 mb-1">Reset Page Views</button>
+                    <button type="button" data-toggle="modal" data-target="#resetCommentsModal" class="btn btn-danger mb-1">Reset Comments</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="modal fade" id="resetCommentsModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reset comments?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        This can't be undone!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a href="{{ url_for('main.reset_comments') }}" class="btn btn-danger" role="button" aria-pressed="true">Reset Comments</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="resetViewModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Reset Views?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        This can't be undone!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a href="{{ url_for('main.reset_views') }}" class="btn btn-danger" role="button" aria-pressed="true">Reset Views</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
