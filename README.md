@@ -1,4 +1,4 @@
-# flask_chat_app
+# Flask-Chat-App
 
 Demonstration of a Flask application with live chat functionality.  Comments are added to the page for all connected clients, and the page views automatically updates as well.
 
